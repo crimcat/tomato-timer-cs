@@ -143,7 +143,6 @@ namespace TomatoTimer {
         /// </summary>
         private void PlayBunchEndedSoundIfConfigured() {
             if(isBunchEndedSoundNeeded) {
-                SoundPlayer sp = new SoundPlayer(Resource.finish);
                 soundPlayer.Stream = Resource.finish;
                 soundPlayer.Play();
             }
