@@ -200,14 +200,17 @@ namespace TomatoTimer {
             case TomatoEngine.State.FINISHED:
                 message = "У нас сейчас: отсчёт закончен";
                 PlayBunchEndedSoundIfConfigured();
+                workBtn.Dispatcher.BeginInvoke(new Action(() => {
+                    workBtn.IsEnabled = true;
+                }));
                 bunchSizeCombobox.Dispatcher.BeginInvoke(new Action(() => {
-                    bunchSizeCombobox.IsEnabled = false;
+                    bunchSizeCombobox.IsEnabled = true;
                 }));
                 tomatoDurationCombobox.Dispatcher.BeginInvoke(new Action(() => {
-                    tomatoDurationCombobox.IsEnabled = false;
+                    tomatoDurationCombobox.IsEnabled = true;
                 }));
                 breakDurationCombobox.Dispatcher.BeginInvoke(new Action(() => {
-                    breakDurationCombobox.IsEnabled = false;
+                    breakDurationCombobox.IsEnabled = true;
                 }));
                 break;
             }
