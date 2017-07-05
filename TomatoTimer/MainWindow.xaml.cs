@@ -61,30 +61,34 @@ namespace TomatoTimer {
         /// <param name="sender">action sender object reference</param>
         /// <param name="e">RoutedEventArgs object reference</param>
         private void GoButtonClick(object sender, RoutedEventArgs e) {
-            if (null == te) {
-                te = new TomatoTimer.TomatoEngine(bunchSize, tomatoDuration, breakDuration);
-                te.SetControlledIntervalElapsedCallback(() => {
-                    UpdateTimer();
-                });
-                te.SetEngineStateChangedCallback(() => {
-                    UpdateTimer();
-                    SetCurrentStateLabel();
-                    ComeToFront();
-                    trayNotifyIcon.ShowBalloonTip(1000);
-                });
+            if(null != te) {
+                if(te.CurrentState == TomatoEngine.State.FINISHED) {
+                    te = null;
+                } else {
+                    throw new Exception("Logic problem with start button");
+                }
+            }
 
-                te.Start();
+            te = new TomatoEngine(bunchSize, tomatoDuration, breakDuration);
+            te.SetControlledIntervalElapsedCallback(() => {
+                UpdateTimer();
+            });
+            te.SetEngineStateChangedCallback(() => {
                 UpdateTimer();
                 SetCurrentStateLabel();
+                ComeToFront();
+                trayNotifyIcon.ShowBalloonTip(1000);
+            });
 
-                ((Button)sender).IsEnabled = false;
-                pauseBtn.IsEnabled = true;
-                bunchSizeCombobox.IsEnabled = false;
-                tomatoDurationCombobox.IsEnabled = false;
-                breakDurationCombobox.IsEnabled = false;
-            } else {
-                throw new Exception("Logic problem with start button");
-            }
+            te.Start();
+            UpdateTimer();
+            SetCurrentStateLabel();
+
+            ((Button)sender).IsEnabled = false;
+            pauseBtn.IsEnabled = true;
+            bunchSizeCombobox.IsEnabled = false;
+            tomatoDurationCombobox.IsEnabled = false;
+            breakDurationCombobox.IsEnabled = false;
         }
 
         /// <summary>
@@ -202,6 +206,9 @@ namespace TomatoTimer {
                 PlayBunchEndedSoundIfConfigured();
                 workBtn.Dispatcher.BeginInvoke(new Action(() => {
                     workBtn.IsEnabled = true;
+                }));
+                pauseBtn.Dispatcher.BeginInvoke(new Action(() => {
+                    pauseBtn.IsEnabled = false;
                 }));
                 bunchSizeCombobox.Dispatcher.BeginInvoke(new Action(() => {
                     bunchSizeCombobox.IsEnabled = true;
@@ -348,7 +355,7 @@ namespace TomatoTimer {
         private bool isBreakStartedSoundNeeded = false;
         private bool isBunchEndedSoundNeeded = false;
 
-        private TomatoTimer.TomatoEngine te = null;
+        private TomatoEngine te = null;
 
         private SoundPlayer soundPlayer = new SoundPlayer();
         private System.Windows.Forms.NotifyIcon trayNotifyIcon = null;
