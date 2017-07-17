@@ -173,7 +173,9 @@ namespace TomatoTimer {
                 () => {
                     CheckUpdateBunchCounter();
                     currentState = getNextState();
-                    minutesTimer.Go(CurrentStateDuration);
+                    if(currentState != State.FINISHED) {
+                        minutesTimer.Go(CurrentStateDuration);
+                    }
                     engineStateChanged();
                 }
             );
