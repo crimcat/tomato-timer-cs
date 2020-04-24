@@ -43,8 +43,9 @@ namespace TomatoTimer {
                             gransCounter += GRANULARITY_IN_SECONDS;
                             if(gransCounter >= ONE_MINUTE) {
                                 gransCounter = 0;
+                                bool isFinished = DecrementMinutesCounter();
                                 minutesNotifier();
-                                if(DecrementMinutesCounter()) {
+                                if(isFinished) {
                                     timeFinishedNotifier();
                                     break;
                                 }
