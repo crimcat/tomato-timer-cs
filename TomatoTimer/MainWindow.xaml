@@ -50,26 +50,26 @@
                     <Label Content="Длительность помидорки:&#xD;&#xA;" HorizontalAlignment="Left" Margin="10,41,0,0" VerticalAlignment="Top" Height="25" Grid.ColumnSpan="3"/>
                     <Label Content="Длительность перерыва:&#xD;&#xA;" HorizontalAlignment="Left" Margin="10,68,0,0" VerticalAlignment="Top" Height="26" Width="155" Grid.ColumnSpan="3"/>
                     <ComboBox x:Name="bunchSizeCombobox" HorizontalAlignment="Left" Margin="108.4,14,0,0" SelectedIndex="0" VerticalAlignment="Top" Width="60" Grid.ColumnSpan="2" Grid.Column="2">
+                        <ComboBoxItem Content="1" HorizontalAlignment="Left" Width="118.4" Selected="BunchSizeSelectorChanged"/>
                         <ComboBoxItem Content="2" HorizontalAlignment="Left" Width="118.4" Selected="BunchSizeSelectorChanged"/>
                         <ComboBoxItem Content="3" HorizontalAlignment="Left" Width="118.4" Selected="BunchSizeSelectorChanged"/>
                         <ComboBoxItem Content="4" HorizontalAlignment="Left" Width="118.4" Selected="BunchSizeSelectorChanged"/>
                         <ComboBoxItem Content="5" HorizontalAlignment="Left" Width="118.4" Selected="BunchSizeSelectorChanged"/>
-                        <ComboBoxItem Content="6" HorizontalAlignment="Left" Width="118.4" Selected="BunchSizeSelectorChanged"/>
                     </ComboBox>
                     <ComboBox x:Name="tomatoDurationCombobox" HorizontalAlignment="Left" Margin="108.4,41,0,0" SelectedIndex="0" VerticalAlignment="Top" Width="60" Grid.ColumnSpan="2" Grid.Column="2">
+                        <ComboBoxItem Content="2" HorizontalAlignment="Left" Width="92.8" Selected="TomatoDurationSelectorChanged"/>
+                        <ComboBoxItem Content="20" HorizontalAlignment="Left" Width="92.8" Selected="TomatoDurationSelectorChanged"/>
+                        <ComboBoxItem Content="25" HorizontalAlignment="Left" Width="92.8" Selected="TomatoDurationSelectorChanged"/>
                         <ComboBoxItem Content="30" HorizontalAlignment="Left" Width="92.8" Selected="TomatoDurationSelectorChanged"/>
                         <ComboBoxItem Content="35" HorizontalAlignment="Left" Width="92.8" Selected="TomatoDurationSelectorChanged"/>
                         <ComboBoxItem Content="40" HorizontalAlignment="Left" Width="92.8" Selected="TomatoDurationSelectorChanged"/>
                         <ComboBoxItem Content="45" HorizontalAlignment="Left" Width="92.8" Selected="TomatoDurationSelectorChanged"/>
                         <ComboBoxItem Content="50" HorizontalAlignment="Left" Width="92.8" Selected="TomatoDurationSelectorChanged"/>
-                        <ComboBoxItem Content="55" HorizontalAlignment="Left" Width="92.8" Selected="TomatoDurationSelectorChanged"/>
                     </ComboBox>
                     <ComboBox x:Name="breakDurationCombobox" HorizontalAlignment="Left" Margin="108.4,68,0,0" SelectedIndex="0" VerticalAlignment="Top" Width="60" Grid.ColumnSpan="2" Grid.Column="2">
                         <ComboBoxItem Content="5" HorizontalAlignment="Left" Width="92.8" Selected="BreakDurationSelectorChanged"/>
                         <ComboBoxItem Content="10" HorizontalAlignment="Left" Width="92.8" Selected="BreakDurationSelectorChanged"/>
                         <ComboBoxItem Content="15" HorizontalAlignment="Left" Width="92.8" Selected="BreakDurationSelectorChanged"/>
-                        <ComboBoxItem Content="20" HorizontalAlignment="Left" Width="92.8" Selected="BreakDurationSelectorChanged"/>
-                        <ComboBoxItem Content="25" HorizontalAlignment="Left" Width="92.8" Selected="BreakDurationSelectorChanged"/>
                     </ComboBox>
                     <CheckBox Content="Сигнал начала помидорки" HorizontalAlignment="Left" Margin="0.4,114,0,0" VerticalAlignment="Top" Grid.ColumnSpan="2" Checked="TomatoStartedSoundNeeded" Grid.Column="2"/>
                     <CheckBox Content="Сигнал начала перерыва" HorizontalAlignment="Left" Margin="0.4,134,0,0" VerticalAlignment="Top" Grid.ColumnSpan="2" Checked="BreakStartedSoundNeeded" Grid.Column="2"/>

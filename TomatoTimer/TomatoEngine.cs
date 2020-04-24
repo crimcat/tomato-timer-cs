@@ -43,11 +43,11 @@ namespace TomatoTimer {
                             gransCounter += GRANULARITY_IN_SECONDS;
                             if(gransCounter >= ONE_MINUTE) {
                                 gransCounter = 0;
+                                minutesNotifier();
                                 if(DecrementMinutesCounter()) {
                                     timeFinishedNotifier();
                                     break;
                                 }
-                                minutesNotifier();
                             }
                         }
                     }
@@ -88,10 +88,7 @@ namespace TomatoTimer {
         /// <summary>
         /// Property: how many minutes are still left to run.
         /// </summary>
-        public uint MinutesLeft {
-            get { return minutesLeft; }
-            private set { minutesLeft = value; }
-        }
+        public uint MinutesLeft { get; private set; } = 0;
 
         /// <summary>
         /// Decrement number of minutes left.
@@ -99,21 +96,19 @@ namespace TomatoTimer {
         /// <returns>Return true if counter finished</returns>
         private bool DecrementMinutesCounter() {
             if(MinutesLeft > 0) {
-                MinutesLeft = MinutesLeft - 1;
+                MinutesLeft -= 1;
             }
             return (0 == MinutesLeft);
         }
 
         private const int GRANULARITY_IN_SECONDS = 2;
         private const int ONE_MINUTE = 60;
-
-        private uint minutesLeft = 0;
         private bool isPaused = false;
 
         private Thread worker = null;
 
-        private OneMinutePassed minutesNotifier;
-        private TimeCounterFinished timeFinishedNotifier;
+        private readonly OneMinutePassed minutesNotifier;
+        private readonly TimeCounterFinished timeFinishedNotifier;
     }
 
     public class TomatoEngine {
@@ -172,7 +167,7 @@ namespace TomatoTimer {
                 () => { controlledIntervalElapsed(); },
                 () => {
                     CheckUpdateBunchCounter();
-                    currentState = getNextState();
+                    currentState = PeekNextState();
                     if(currentState != State.FINISHED) {
                         minutesTimer.Go(CurrentStateDuration);
                     }
@@ -237,6 +232,7 @@ namespace TomatoTimer {
         public uint MinutesToGo {
             get { return minutesTimer.MinutesLeft; }
         }
+
         /// <summary>
         /// Get engine current state.
         /// <see cref="State"/>
@@ -287,7 +283,7 @@ namespace TomatoTimer {
         /// Decrement bunch counter if it is possible
         /// </summary>
         private void CheckUpdateBunchCounter() {
-            if((State.BREAK == currentState) && (State.WORKING == getNextState())) {
+            if(State.BREAK == currentState) {
                 --bunchSize;
             }
         }
@@ -296,11 +292,11 @@ namespace TomatoTimer {
         /// Calculate next engine state
         /// </summary>
         /// <returns>New state the engine can switch to</returns>
-        private State getNextState() {
+        private State PeekNextState() {
             switch(currentState) {
             case State.IDLE: return State.IDLE;
-            case State.WORKING: return State.BREAK;
-            case State.BREAK: return BunchSize > 0 ? State.WORKING : State.FINISHED;
+            case State.WORKING: return BunchSize > 1 ? State.BREAK : State.FINISHED;
+            case State.BREAK: return State.WORKING;
             case State.FINISHED: return State.FINISHED;
             case State.PAUSED: return State.WORKING;
             case State.PAUSED_IN_BREAK: return State.BREAK;
@@ -310,10 +306,10 @@ namespace TomatoTimer {
         private State currentState = State.IDLE;
 
         private uint bunchSize;
-        private uint tomatoDuration;
-        private uint breakDuration;
+        private readonly uint tomatoDuration;
+        private readonly uint breakDuration;
 
-        private MinutesTimer minutesTimer;
+        private readonly MinutesTimer minutesTimer;
 
         private EngineStateChanged engineStateChanged;
         private ControlledIntervalElapsed controlledIntervalElapsed;

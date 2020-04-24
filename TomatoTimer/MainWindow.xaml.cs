@@ -20,7 +20,7 @@ namespace TomatoTimer {
             Application.Current.ShutdownMode = ShutdownMode.OnMainWindowClose;
 
             MemoryStream ms = new MemoryStream();
-            Resource.tb.Save(ms, System.Drawing.Imaging.ImageFormat.Png);
+            TomatoTiimer.Resource.tb.Save(ms, System.Drawing.Imaging.ImageFormat.Png);
             BitmapImage bi = new BitmapImage();
             bi.BeginInit();
             ms.Seek(0, SeekOrigin.Begin);
@@ -28,10 +28,12 @@ namespace TomatoTimer {
             bi.EndInit();
             helpImage.Source = bi;
 
-            trayNotifyIcon = new System.Windows.Forms.NotifyIcon();
-            trayNotifyIcon.Icon = System.Drawing.Icon.FromHandle(Resource.t.GetHicon());
-            trayNotifyIcon.Text = "TomatoTimer: Idle";
-            trayNotifyIcon.BalloonTipTitle = "TomatoTimer";
+            trayNotifyIcon = new System.Windows.Forms.NotifyIcon
+            {
+                Icon = System.Drawing.Icon.FromHandle(TomatoTiimer.Resource.t.GetHicon()),
+                Text = "TomatoTimer: Idle",
+                BalloonTipTitle = "TomatoTimer"
+            };
             trayNotifyIcon.Click += delegate(object sender, EventArgs args) {
                 if(WindowState == WindowState.Normal) {
                     Hide();
@@ -83,6 +85,9 @@ namespace TomatoTimer {
             te.Start();
             UpdateTimer();
             SetCurrentStateLabel();
+            bunchCounterLabel.Dispatcher.BeginInvoke(new Action(() => {
+                bunchCounterLabel.Header = String.Format("{0}", te.BunchSize);
+            }));
 
             ((Button)sender).IsEnabled = false;
             pauseBtn.IsEnabled = true;
@@ -127,7 +132,7 @@ namespace TomatoTimer {
         /// </summary>
         private void PlayTomatoStartedSoundIfConfigured() {
             if(isTomatoStartedSoundNeeded) {
-                soundPlayer.Stream = Resource.go_working;
+                soundPlayer.Stream = TomatoTiimer.Resource.go_working;
                 soundPlayer.Play();
             }
         }
@@ -137,7 +142,7 @@ namespace TomatoTimer {
         /// </summary>
         private void PlayBreakStartedSoundIfConfigured() {
             if(isBreakStartedSoundNeeded) {
-                soundPlayer.Stream = Resource._break;
+                soundPlayer.Stream = TomatoTiimer.Resource._break;
                 soundPlayer.Play();
             }
         }
@@ -147,7 +152,7 @@ namespace TomatoTimer {
         /// </summary>
         private void PlayBunchEndedSoundIfConfigured() {
             if(isBunchEndedSoundNeeded) {
-                soundPlayer.Stream = Resource.finish;
+                soundPlayer.Stream = TomatoTiimer.Resource.finish;
                 soundPlayer.Play();
             }
         }
@@ -176,6 +181,9 @@ namespace TomatoTimer {
                 break;
             case TomatoEngine.State.FINISHED:
                 trayNotifyIcon.Text = "TomatoTimer: finished";
+                bunchCounterLabel.Dispatcher.BeginInvoke(new Action(() => {
+                    bunchCounterLabel.Header = "#";
+                }));
                 trayNotifyIcon.BalloonTipText = "Finished";
                 break;
             }
@@ -357,7 +365,7 @@ namespace TomatoTimer {
 
         private TomatoEngine te = null;
 
-        private SoundPlayer soundPlayer = new SoundPlayer();
+        private readonly SoundPlayer soundPlayer = new SoundPlayer();
         private System.Windows.Forms.NotifyIcon trayNotifyIcon = null;
         private Thread clocks = null;
     }
